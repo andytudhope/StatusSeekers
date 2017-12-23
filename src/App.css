@@ -66,3 +66,10 @@ code {
   height: 16px;
   margin-right: 10px;
 }
+
+/* Buttons */
+
+.center-text {
+  text-align: center;
+  font-size: 20px;
+}

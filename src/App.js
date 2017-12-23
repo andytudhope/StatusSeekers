@@ -15,15 +15,12 @@ class App extends Component {
     this.state = {
       keyWord: ''
     }
+
+    this.getKeyWord = this.getKeyWord.bind(this);
   }
 
-  componentWillMount() {
-    /*
-     * SMART CONTRACT SEEKERS
-     *
-     * Normally these functions would be called in the context of a
-     * state management library, but for convenience I've placed them here.
-     */
+  getKeyWord(e) {
+    e.preventDefault();
 
     // So we can update state later.
     var self = this
@@ -49,8 +46,13 @@ class App extends Component {
       statusSeeker.deployed().then(function(instance) {
         statusSeekerInstance = instance
 
-        // Get the key word for this contract
-        return statusSeekerInstance.keyWord.call(3, {from: accounts[0]});
+        // Generate random number between 1 and 12. Once we have implemented QR code support
+        // this id will be generated when the users scans the QR and the corresponding word
+        // will be returned without giving away it's position in the array.
+        var id = Math.floor((Math.random() * 10) + 3);
+
+        // Get the key word for the id generated
+        return statusSeekerInstance.keyWord.call(id, {from: accounts[0]});
       }).then(function(result) {
         // Update state with the result.
         return self.setState({ keyWord: result.toString() })
@@ -72,7 +74,9 @@ class App extends Component {
               <p>The below will show a stored key word that is part of a 12 word phrase that can be used to reconstruct a private key in order to earn a reward</p>
               <p>This is a simple proof of concept, obviously, we will need to implement the ability to scan a QR code from a DApp that will generate the right call
                 and only then diplay the result to the seeker.</p>
-              <p>The word stored at the 4th key is: {this.state.keyWord}</p>
+              <button onClick={this.getKeyWord}>Get Key Word</button>
+              <p>Your lucky one of twelve key words is (drumroll):</p>
+              <p className="center-text"><strong>{this.state.keyWord}</strong></p>
             </div>
           </div>
         </main>
