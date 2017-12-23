@@ -1,5 +1,5 @@
-var StatusSeeker1 = artifacts.require("./StatusSeeker1.sol");
+var StatusSeeker = artifacts.require("./StatusSeeker.sol");
 
 module.exports = function(deployer) {
-  deployer.deploy(StatusSeeker1);
+  deployer.deploy(StatusSeeker);
 };

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import StatusSeeker1Contract from '../build/contracts/StatusSeeker1.json'
+import StatusSeekerContract from '../build/contracts/StatusSeeker.json'
 import Config from '../truffle.js'
 import Web3 from 'web3'
 
@@ -33,24 +33,24 @@ class App extends Component {
     
     const provider = new Web3.providers.HttpProvider('http://' + host + ':' + port)
     const contract = require('truffle-contract')
-    const statusSeeker1 = contract(StatusSeeker1Contract)
-    statusSeeker1.setProvider(provider)
+    const statusSeeker = contract(StatusSeekerContract)
+    statusSeeker.setProvider(provider)
 
     // Get Web3 so we can get our accounts.
     const web3RPC = new Web3(provider)
 
     // Declaring this for later so we can chain functions on SimpleStorage.
-    var statusSeeker1Instance
+    var statusSeekerInstance
 
     // Get accounts.
     web3RPC.eth.getAccounts(function(error, accounts) {
       console.log(accounts)
 
-      statusSeeker1.deployed().then(function(instance) {
-        statusSeeker1Instance = instance
+      statusSeeker.deployed().then(function(instance) {
+        statusSeekerInstance = instance
 
         // Get the key word for this contract
-        return statusSeeker1Instance.key({from: accounts[0]})
+        return statusSeekerInstance.keyWord.call(3, {from: accounts[0]});
       }).then(function(result) {
         // Update state with the result.
         return self.setState({ keyWord: result.toString() })
@@ -77,7 +77,7 @@ class App extends Component {
               <p>The below will show a stored key word that is part of a 12 word phrase that can be used to reconstruct a private key in order to earn a reward</p>
               <p>This is a simple proof of concept, obviously, we will need to implement the ability to scan a QR code from a DApp that will generate the right call
                 and only then diplay the result to the seeker.</p>
-              <p>The stored key word is: {this.state.keyWord}</p>
+              <p>The word stored at the 4th key is: {this.state.keyWord}</p>
             </div>
           </div>
         </main>
