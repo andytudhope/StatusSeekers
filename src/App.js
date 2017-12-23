@@ -19,7 +19,7 @@ class App extends Component {
 
   componentWillMount() {
     /*
-     * SMART CONTRACT EXAMPLE
+     * SMART CONTRACT SEEKERS
      *
      * Normally these functions would be called in the context of a
      * state management library, but for convenience I've placed them here.
@@ -28,7 +28,7 @@ class App extends Component {
     // So we can update state later.
     var self = this
 
-    // Get the RPC provider and setup our SimpleStorage contract.
+    // Get the RPC provider and setup our StatusSeeker contract.
     var {host, port} = Config.networks[process.env.NODE_ENV]
     
     const provider = new Web3.providers.HttpProvider('http://' + host + ':' + port)
@@ -39,7 +39,7 @@ class App extends Component {
     // Get Web3 so we can get our accounts.
     const web3RPC = new Web3(provider)
 
-    // Declaring this for later so we can chain functions on SimpleStorage.
+    // Declaring this for later so we can chain functions on StatusSeeker.
     var statusSeekerInstance
 
     // Get accounts.
@@ -63,11 +63,6 @@ class App extends Component {
       <div className="App">
         <nav className="navbar pure-menu pure-menu-horizontal">
             <a href="#" className="pure-menu-heading pure-menu-link">Status Seeker</a>
-            {/*}<ul className="pure-menu-list">
-                <li className="pure-menu-item"><a href="#" className="pure-menu-link">News</a></li>
-                <li className="pure-menu-item"><a href="#" className="pure-menu-link">Sports</a></li>
-                <li className="pure-menu-item"><a href="#" className="pure-menu-link">Finance</a></li>
-            </ul>*/}
         </nav>
 
         <main className="container">
