@@ -49,7 +49,7 @@ class App extends Component {
         // Generate random number between 1 and 12. Once we have implemented QR code support
         // this id will be generated when the users scans the QR and the corresponding word
         // will be returned without giving away it's position in the array.
-        var id = Math.floor((Math.random() * 10) + 3);
+        var id = Math.floor((Math.random() * 12) + 1);
 
         // Get the key word for the id generated
         return statusSeekerInstance.keyWord.call(id, {from: accounts[0]});
@@ -64,7 +64,7 @@ class App extends Component {
     return (
       <div className="App">
         <nav className="navbar pure-menu pure-menu-horizontal">
-            <a href="#" className="pure-menu-heading pure-menu-link">Status Seeker</a>
+            <a href="#" className="pure-menu-heading pure-menu-link">Status Community</a>
         </nav>
 
         <main className="container">
