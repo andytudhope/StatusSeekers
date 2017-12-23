@@ -75,7 +75,7 @@ class App extends Component {
             <div className="pure-u-1-1">
               <h1>Smart Contract Seekers</h1>
               <p>The below will show a stored key word that is part of a 12 word phrase that can be used to reconstruct a private key in order to earn a reward</p>
-              <p>This is a simple proof of concept, obviously, we will need to implement the ability to scan a QR code from a DApp that will generate the right calle
+              <p>This is a simple proof of concept, obviously, we will need to implement the ability to scan a QR code from a DApp that will generate the right call
                 and only then diplay the result to the seeker.</p>
               <p>The stored key word is: {this.state.keyWord}</p>
             </div>
