@@ -46,10 +46,10 @@ class App extends Component {
       statusSeeker.deployed().then(function(instance) {
         statusSeekerInstance = instance
 
-        // Generate random number between 1 and 12. Once we have implemented QR code support
+        // Generate random number between 0 and 11. Once we have implemented QR code support
         // this id will be generated when the users scans the QR and the corresponding word
         // will be returned without giving away it's position in the array.
-        var id = Math.floor((Math.random() * 12) + 1);
+        var id = Math.floor((Math.random() * 11));
 
         // Get the key word for the id generated
         return statusSeekerInstance.keyWord.call(id, {from: accounts[0]});
@@ -71,10 +71,12 @@ class App extends Component {
           <div className="pure-g">
             <div className="pure-u-1-1">
               <h1>Smart Contract Seekers</h1>
-              <p>The below will show a stored key word that is part of a 12 word phrase that can be used to reconstruct a private key in order to earn a reward</p>
+              <p>The below will show a stored key word that is part of a 12 word phrase that can be used to reconstruct a private key in order to earn a reward.</p>
               <p>This is a simple proof of concept, obviously, we will need to implement the ability to scan a QR code from a DApp that will generate the right call
                 and only then diplay the result to the seeker.</p>
-              <button onClick={this.getKeyWord}>Get Key Word</button>
+              <div className="button-kw-container">
+                <button className="button-kw" onClick={this.getKeyWord}>Get Key Word</button>
+              </div>
               <p>Your lucky one of twelve key words is (drumroll):</p>
               <p className="center-text"><strong>{this.state.keyWord}</strong></p>
             </div>

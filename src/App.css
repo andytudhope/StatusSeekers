@@ -62,7 +62,7 @@ code {
   float: right;
 }
 
-.navbar .uport-logo {
+.navbar {
   height: 16px;
   margin-right: 10px;
 }
@@ -72,4 +72,24 @@ code {
 .center-text {
   text-align: center;
   font-size: 20px;
+}
+
+.button-kw-container {
+  display: flex; 
+  justify-content: center;
+  margin: 10px 0;
+}
+
+.button-kw {
+  padding:8px 12px;
+  background-color: #233e5e;
+  border: 1px solid #233e5e;
+  border-radius: 3px;
+  color: #fff;
+  font-size: 16px;
+}
+
+.button-kw:hover {
+  background-color: #fff;
+  color:#233e5e;
 }

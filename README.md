@@ -8,3 +8,47 @@ Moreover, we think that being able to illustrate that all it takes in order to i
 
 As always, this is about The State of Us.
 
+## Instructions
+
+First of all, make sure you have Status installed. The latest android builds can be found [here](http://artifacts.status.im:8081/artifactory/nightlies-local/). If you require an iOS TestFlight invite, please join our [chat](https://chat.status.im/) and ping me @cryptowanderer and I will add you to our list of testers.
+
+Once installed, open the chat with `Console` and select the `/debug` suggestion just above the keyboard input. Turn debugging on.
+
+You will also need to make sure you have `status-dev-cli` installed, which you can clone from [here](https://github.com/status-im/status-dev-cli) and that you have either `testrpc` or `Ganache` installed. I happen to be using Ganache right now to illustrate more visually to my friends what is going on. You can get it [here](https://github.com/trufflesuite/ganache/releases).
+
+Run `status-dev-cli scan` to ensure that the cli tool can talk to your device/emulator. It should return the device's IP address, which we'll need later.
+
+Start Ganache once all of that is done (or `testrpc`, or just `truffle develop` depending on your preference).
+
+Clone this repo and do the necessary node things: 
+
+```
+git clone https://github.com/andytudhope/StatusSeekers.git && cd StatusSeekers/
+npm install
+```
+
+Make sure that the rpc port listed in `truffle.js` is pointing to the correct place. Currently it is set up to talk to port `7545` because that is where Ganache is listening. Change it if you need to.
+
+```
+truffle compile
+truffle migrate
+```
+
+Now, we need to make sure that Status is listening to the network onto which we have just deployed our contract with the `migrate` command. If you're using an Android phone like me, you'll also require some `adb` magic. If you're on iOS or in an emulator, you can skip the last two steps below:
+
+```
+status-dev-cli switch-node "http://localhost:7545" --ip <DEVICE-IP>
+adb reverse tcp:7545 tcp:7545
+// The next line is required because this example is set up to serve the web frontend on port 3000
+adb reverse tcp:3000 tcp:3000
+```
+
+We're finally ready to run the actual app and have it talk to our simple smart contract so that we can start seeking the words required to unlock the reward! Make sure that you pass in your device's IP as an environment variable, otherwise the start script will fail.
+
+```
+IP=<DEVICE-IP> npm run start
+```
+
+Happy hunting!
+
+
