@@ -116,6 +116,6 @@ status.addListener('init', function (params, context) {
     if (!cnt) {
         cnt = 1;
         localStorage.setItem("cnt", cnt);
-        return {'text-message': 'Welcome Message'};
+        return {'text-message': 'Welcome seeker! Knock on the sky and listen for the colour of the wind...'};
     }
 });
