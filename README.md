@@ -51,4 +51,12 @@ IP=<DEVICE-IP> npm run start
 
 Happy hunting!
 
+## Sketch of The Seeker Game
+
+You may look at the 'smart' contract and think, "No way! That's too simple-minded to ever work. All someone would need yo do is figure out the address you had deployed the contract at and inspect it for themselves to figure out the words and swipe the reward before the game ever began."
+
+Well, we can be cleverer than that. The 12 words are not necessarily stored in order in the smart contract (and we will only verify the source once the #ArtProject has begun), so we actually have `12!` 'hiding places' to put the reward. The only hints given to the actual order will be incorporated in the physical piece. 
+
+Then, I plan on writing a simple bot that accepts 12 word long strings and either returns `No`, or the `password` required to unlock the Status account with the reward in it (for obvious reasons this code might have to stay private until after the #ArtProject has begun). Keep it simple; keep it fun!
+
 
