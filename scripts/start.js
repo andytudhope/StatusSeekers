@@ -311,7 +311,7 @@ function runDevServer(host, port, protocol) {
 function addToStatus(dappUrl) {
   var deviceIP = process.env.IP || 'localhost';
   child.exec(
-    "./node_modules/.bin/status-dev-cli add --dappUrl " + dappUrl + " --botUrl " + (dappUrl + BOT_SITE_PATH) + " --ip " + deviceIP,
+    "./node_modules/.bin/status-dev-cli add --name \"Status Smart Seekers\" --dappUrl " + dappUrl + " --botUrl " + (dappUrl + BOT_SITE_PATH) + " --photoPath \"http://andytudhope.africa/mag-glass.jpeg\" --ip " + deviceIP,
     {stdio: "inherit"},
     function(error, stdout, stderr) {
       devCliMessages.stdout = stdout;
