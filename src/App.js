@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import StatusSeekerContract from '../build/contracts/StatusSeeker.json'
 import Config from '../truffle.js'
-import Web3 from 'web3'
+import getWeb3 from './utils/getWeb3'
 
 import './css/oswald.css'
 import './css/open-sans.css'
@@ -13,10 +13,23 @@ class App extends Component {
     super(props)
 
     this.state = {
+      web3: null,
       keyWord: ''
     }
 
     this.getKeyWord = this.getKeyWord.bind(this);
+  }
+
+  componentDidMount() {     
+    getWeb3
+    .then(results => {
+      this.setState({
+        web3: results.web3
+      })
+    })
+    .catch(() => {
+      console.log('Error finding web3.')
+    })
   }
 
   getKeyWord(e) {
@@ -25,35 +38,25 @@ class App extends Component {
     // So we can update state later.
     var self = this
 
-    // Get the RPC provider and setup our StatusSeeker contract.
-    var {host, port} = Config.networks[process.env.NODE_ENV]
-    
-    const provider = new Web3.providers.HttpProvider('http://' + host + ':' + port)
+    // Declare the contract abstractions
     const contract = require('truffle-contract')
     const statusSeeker = contract(StatusSeekerContract)
-    statusSeeker.setProvider(provider)
-
-    // Get Web3 so we can get our accounts.
-    const web3RPC = new Web3(provider)
+    statusSeeker.setProvider(this.state.web3.currentProvider)
 
     // Declaring this for later so we can chain functions on StatusSeeker.
     var statusSeekerInstance
 
     // Get accounts.
-    web3RPC.eth.getAccounts(function(error, accounts) {
+    this.state.web3.eth.getAccounts(function(error, accounts) {
       console.log(accounts)
 
-      statusSeeker.deployed().then(function(instance) {
-        statusSeekerInstance = instance
-
+      statusSeekerInstance = statusSeeker.at("0x9cfd83d56a7937cf7c5afe2281e4738472c4ab61")
         // Generate random number between 0 and 11. Once we have implemented QR code support
         // this id will be generated when the users scans the QR and the corresponding word
         // will be returned without giving away it's position in the array.
         var id = Math.floor((Math.random() * 11));
 
-        // Get the key word for the id generated
-        return statusSeekerInstance.keyWord.call(id, {from: accounts[0]});
-      }).then(function(result) {
+        statusSeekerInstance.keyWord.call(id, {from: accounts[0]}).then(function(result) {
         // Update state with the result.
         return self.setState({ keyWord: result.toString() })
       })
