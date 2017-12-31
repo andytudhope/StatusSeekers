@@ -20,7 +20,7 @@ class App extends Component {
     this.getKeyWord = this.getKeyWord.bind(this);
   }
 
-  componentDidMount() {     
+  componentDidMount() {
     getWeb3
     .then(results => {
       this.setState({
