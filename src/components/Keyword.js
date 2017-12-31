@@ -66,7 +66,7 @@ const Keyword = ({
   connectDropTarget,
   text
 }) => connectDragSource(connectDropTarget(
-  <div style={{ opacity: isDragging ? 0.5 : 1 }}>
+  <div className="keyword" style={{ opacity: isDragging ? 0.5 : 1 }}>
     {text}
   </div>
 ))

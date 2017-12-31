@@ -75,7 +75,7 @@ code {
 }
 
 .button-kw-container {
-  display: flex; 
+  display: flex;
   justify-content: center;
   margin: 10px 0;
 }
@@ -92,4 +92,9 @@ code {
 .button-kw:hover {
   background-color: #fff;
   color:#233e5e;
+}
+
+
+.copy-button-container {
+  margin-top: 10px;
 }

@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import getWeb3 from './utils/getWeb3'
 import statusSeekerContract from './utils/statusSeeker'
 import Loading from './components/Loading'
-import KeywordOrganizer from './components/KeywordOrganizer';
+import KeywordOrganizer from './components/KeywordOrganizer'
+import CopyKeywords from './components/CopyKeywords'
 
 import './css/oswald.css'
 import './css/open-sans.css'
@@ -66,8 +67,17 @@ class App extends Component {
         <div className="button-kw-container">
           <button className="button-kw" onClick={this.getKeyWord}>Get Key Word</button>
         </div>
-        <p>Your lucky one of twelve key words is (drumroll):</p>
-        <KeywordOrganizer keywords={keywords} moveKeyword={this.moveKeyword} />
+        {keywords.length > 0 &&
+          <div>
+            <p>You've found {keywords.length} words! Look for a total of 12!</p>
+            <KeywordOrganizer keywords={keywords} moveKeyword={this.moveKeyword} />
+            {keywords.length === 12 &&
+              <div className="button-kw-container copy-button-container">
+                <CopyKeywords keywords={keywords}>Copy Mnemonic</CopyKeywords>
+              </div>
+            }
+          </div>
+        }
       </div>
     )
   }

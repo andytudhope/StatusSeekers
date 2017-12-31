@@ -4,8 +4,10 @@ import Backend from '../utils/html5AndTouchBackend'
 import MultiBackend from 'react-dnd-multi-backend'
 import { DragDropContext } from 'react-dnd'
 
+import '../css/KeywordOrganizer.css'
+
 const KeywordOrganizer = ({ keywords, moveKeyword }) => (
-  <div>
+  <div className="keyword-organizer">
     {keywords.map((k, i) =>
       <Keyword key={k} index={i} text={k} moveKeyword={moveKeyword} />
     )}
