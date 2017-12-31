@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import getWeb3 from './utils/getWeb3'
 import statusSeekerContract from './utils/statusSeeker'
 import Loading from './components/Loading'
+import KeywordOrganizer from './components/KeywordOrganizer';
 
 import './css/oswald.css'
 import './css/open-sans.css'
@@ -46,6 +47,15 @@ class App extends Component {
     })
   }
 
+  moveKeyword = (dragIndex, hoverIndex) => {
+    const dragKeyword = this.state.keywords[dragIndex]
+    let keywords = [...this.state.keywords]
+    keywords.splice(dragIndex, 1)
+    keywords.splice(hoverIndex, 0, dragKeyword)
+
+    this.setState({ keywords })
+  }
+
   _renderGame = () => {
     const {
       keywords
@@ -57,7 +67,7 @@ class App extends Component {
           <button className="button-kw" onClick={this.getKeyWord}>Get Key Word</button>
         </div>
         <p>Your lucky one of twelve key words is (drumroll):</p>
-        <p className="center-text"><strong>{keywords.join(',')}</strong></p>
+        <KeywordOrganizer keywords={keywords} moveKeyword={this.moveKeyword} />
       </div>
     )
   }
