@@ -19,7 +19,8 @@ class App extends Component {
 
     this.state = {
       web3: null,
-      keywords: []
+      keywords: [],
+      statusSeeker: null,
     }
 
     this.getKeyWord = this.getKeyWord.bind(this);
@@ -40,9 +41,8 @@ class App extends Component {
 
   getKeyWord(e) {
     e.preventDefault()
-    this.props.dispatch(addKeyword(this.state.web3))
+    this.props.dispatch(addKeyword(this.state.statusSeeker))
   }
-
 
   _renderGame = () => {
     const {
@@ -59,7 +59,7 @@ class App extends Component {
       <div>
         <div className="button-kw-container">
           {currentKeyword.isFetching ?
-            <p>Please wait, busy loading word</p>
+            <Loading/>
             : <button className="button-kw" onClick={this.getKeyWord}>Get Key Word</button>}
         </div>
         {wordList.length > 0 &&
