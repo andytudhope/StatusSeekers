@@ -64,7 +64,7 @@ class App extends Component {
         </div>
         {wordList.length > 0 &&
           <div>
-            <p>You've found {wordList.length} words! Look for a total of 12!</p>
+            <p>You've found {wordList.length} {wordList.length === 1? 'word' : 'words'}! Look for a total of 12!</p>
             <KeywordOrganizer keywords={wordList} moveKeyword={moveKeyword} />
             {wordList.length === 12 &&
               <div className="button-kw-container copy-button-container">
