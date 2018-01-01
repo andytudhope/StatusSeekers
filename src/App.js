@@ -1,10 +1,13 @@
 import React, { Component } from 'react'
+
 import getWeb3 from './utils/getWeb3'
 import statusSeekerContract from './utils/statusSeeker'
 import Loading from './components/Loading'
 import KeywordOrganizer from './components/KeywordOrganizer'
 import CopyKeywords from './components/CopyKeywords'
 
+import { connect } from 'react-redux'
+import { addKeyword } from './actions'
 import './css/oswald.css'
 import './css/open-sans.css'
 import './css/pure-min.css'
@@ -18,6 +21,8 @@ class App extends Component {
       web3: null,
       keywords: []
     }
+
+    this.getKeyWord = this.getKeyWord.bind(this);
   }
 
   componentDidMount() {
@@ -33,19 +38,9 @@ class App extends Component {
       })
   }
 
-  getKeyWord = async (e) => {
+  getKeyWord(e) {
     e.preventDefault()
-
-    // Generate random number between 0 and 11. Once we have implemented QR code support
-    // this id will be generated when the users scans the QR and the corresponding word
-    // will be returned without giving away it's position in the array.
-    var id = Math.floor((Math.random() * 11));
-
-    const result = await this.state.statusSeeker.getWord(id)
-
-    this.setState({
-      keywords: this.state.keywords.concat([result.toString()])
-    })
+    this.props.dispatch(addKeyword(this.state.web3))
   }
 
   moveKeyword = (dragIndex, hoverIndex) => {
@@ -88,6 +83,11 @@ class App extends Component {
       return (<Loading></Loading>)
     }
 
+    const {
+      currentKeyword,
+      wordList,
+    } = this.props
+
     return (
       <div className="App">
         <nav className="navbar pure-menu pure-menu-horizontal">
@@ -99,7 +99,8 @@ class App extends Component {
             <div className="pure-u-1-1">
               <h1>Smart Contract Seekers</h1>
               <p>The below will show a stored key word that is part of a 12 word phrase that can be used to reconstruct a private key in order to earn a reward.</p>
-              <p>This is a simple proof of concept, obviously, we will need to implement the ability to scan a QR code from a DApp that will generate the right call and only then diplay the result to the seeker.</p>
+              <p>This is a simple proof of concept, obviously, we will need to implement the ability to scan a QR code from a DApp that will generate the right call
+                and only then diplay the result to the seeker.</p>
               {this._renderGame()}
             </div>
           </div>
@@ -109,4 +110,11 @@ class App extends Component {
   }
 }
 
-export default App
+const mapStateToProps = state => {
+  return {
+    currentKeyword: state.currentKeyword,
+    wordList: state.wordList,
+  }
+}
+
+export default connect(mapStateToProps)(App)

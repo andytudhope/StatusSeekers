@@ -59,6 +59,9 @@
     "react-dnd-multi-backend": "^3.0.7",
     "react-dnd-touch-backend": "^0.3.19",
     "react-dom": "^15.4.2",
+    "react-redux": "^5.0.6",
+    "redux": "^3.7.2",
+    "redux-thunk": "^2.2.0",
     "status-dev-cli": "^3.2.9"
   },
   "scripts": {
