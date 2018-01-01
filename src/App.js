@@ -7,7 +7,7 @@ import KeywordOrganizer from './components/KeywordOrganizer'
 import CopyKeywords from './components/CopyKeywords'
 
 import { connect } from 'react-redux'
-import { addKeyword } from './actions'
+import { addKeyword, moveKeywordInList } from './actions'
 import './css/oswald.css'
 import './css/open-sans.css'
 import './css/pure-min.css'
@@ -43,32 +43,32 @@ class App extends Component {
     this.props.dispatch(addKeyword(this.state.web3))
   }
 
-  moveKeyword = (dragIndex, hoverIndex) => {
-    const dragKeyword = this.state.keywords[dragIndex]
-    let keywords = [...this.state.keywords]
-    keywords.splice(dragIndex, 1)
-    keywords.splice(hoverIndex, 0, dragKeyword)
-
-    this.setState({ keywords })
-  }
 
   _renderGame = () => {
     const {
-      keywords
-    } = this.state
+      currentKeyword,
+      wordList,
+    } = this.props
+
+    const moveKeyword = (dragIndex, hoverIndex) => {
+      console.log('move keyword')
+      this.props.dispatch(moveKeywordInList(dragIndex, hoverIndex))
+    }
 
     return (
       <div>
         <div className="button-kw-container">
-          <button className="button-kw" onClick={this.getKeyWord}>Get Key Word</button>
+          {currentKeyword.isFetching ?
+            <p>Please wait, busy loading word</p>
+            : <button className="button-kw" onClick={this.getKeyWord}>Get Key Word</button>}
         </div>
-        {keywords.length > 0 &&
+        {wordList.length > 0 &&
           <div>
-            <p>You've found {keywords.length} words! Look for a total of 12!</p>
-            <KeywordOrganizer keywords={keywords} moveKeyword={this.moveKeyword} />
-            {keywords.length === 12 &&
+            <p>You've found {wordList.length} words! Look for a total of 12!</p>
+            <KeywordOrganizer keywords={wordList} moveKeyword={moveKeyword} />
+            {wordList.length === 12 &&
               <div className="button-kw-container copy-button-container">
-                <CopyKeywords keywords={keywords}>Copy Mnemonic</CopyKeywords>
+                <CopyKeywords keywords={wordList}>Copy Mnemonic</CopyKeywords>
               </div>
             }
           </div>

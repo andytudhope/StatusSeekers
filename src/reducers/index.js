@@ -30,6 +30,16 @@ const reducer = (state = initialState, action) => {
         },
         wordList: newWordList
       }
+    case actions.MOVE_KEYWORD:
+      const dragKeyword = state.wordList[action.dragIndex]
+      let keywords = [...state.wordList]
+      keywords.splice(action.dragIndex, 1)
+      keywords.splice(action.hoverIndex, 0, dragKeyword)
+
+      return {
+        ...state,
+        wordList: keywords
+      }
     default:
       return state
   }

@@ -3,6 +3,7 @@ import StatusSeekerContract from '../../build/contracts/StatusSeeker.json'
 export const actions = {
   LOADING_KEYWORD: 'LOADING_KEYWORD',
   ADD_KEYWORD: 'ADD_KEYWORD',
+  MOVE_KEYWORD: 'MOVE_KEYWORD',
 }
 
 export const addKeyword = (web3) => {
@@ -35,3 +36,9 @@ export const addKeyword = (web3) => {
     })
   }
 }
+
+export const moveKeywordInList = (dragIndex, hoverIndex) => ({
+  type: actions.MOVE_KEYWORD,
+  dragIndex,
+  hoverIndex,
+})
