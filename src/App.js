@@ -1,8 +1,13 @@
 import React, { Component } from 'react'
-import StatusSeekerContract from '../build/contracts/StatusSeeker.json'
-import Config from '../truffle.js'
-import getWeb3 from './utils/getWeb3'
 
+import getWeb3 from './utils/getWeb3'
+import statusSeekerContract from './utils/statusSeeker'
+import Loading from './components/Loading'
+import KeywordOrganizer from './components/KeywordOrganizer'
+import CopyKeywords from './components/CopyKeywords'
+
+import { connect } from 'react-redux'
+import { addKeyword, moveKeywordInList } from './actions'
 import './css/oswald.css'
 import './css/open-sans.css'
 import './css/pure-min.css'
@@ -14,62 +19,74 @@ class App extends Component {
 
     this.state = {
       web3: null,
-      keyWord: ''
+      keywords: [],
+      statusSeeker: null,
     }
 
     this.getKeyWord = this.getKeyWord.bind(this);
   }
 
-  componentDidMount() {     
+  componentDidMount() {
     getWeb3
-    .then(results => {
-      this.setState({
-        web3: results.web3
+      .then(results => {
+        this.setState({
+          web3: results.web3,
+          statusSeeker: statusSeekerContract.withProvider(results.web3.currentProvider)
+        })
       })
-    })
-    .catch(() => {
-      console.log('Error finding web3.')
-    })
+      .catch((err) => {
+        console.error(err)
+      })
   }
 
   getKeyWord(e) {
-    e.preventDefault();
+    e.preventDefault()
+    this.props.dispatch(addKeyword(this.state.statusSeeker))
+  }
 
-    // So we can update state later.
-    var self = this
+  _renderGame = () => {
+    const {
+      currentKeyword,
+      wordList,
+    } = this.props
 
-    // Declare the contract abstractions
-    const contract = require('truffle-contract')
-    const statusSeeker = contract(StatusSeekerContract)
-    statusSeeker.setProvider(this.state.web3.currentProvider)
+    const moveKeyword = (dragIndex, hoverIndex) => {
+      console.log('move keyword')
+      this.props.dispatch(moveKeywordInList(dragIndex, hoverIndex))
+    }
 
-    // Declaring this for later so we can chain functions on StatusSeeker.
-    var statusSeekerInstance
-
-    // Get accounts.
-    this.state.web3.eth.getAccounts(function(error, accounts) {
-      console.log(accounts)
-
-      statusSeekerInstance = statusSeeker.at("0x9cfd83d56a7937cf7c5afe2281e4738472c4ab61")
-        // Generate random number between 0 and 11. Once we have implemented QR code support
-        // this id will be generated when the users scans the QR and the corresponding word
-        // will be returned without giving away it's position in the array.
-        var id = Math.floor((Math.random() * 11));
-
-        statusSeekerInstance.keyWord.call(id, {from: accounts[0]}).then(function(result) {
-        // Update state with the result.
-        return self.setState({ keyWord: result.toString() })
-      })
-    })
+    return (
+      <div>
+        <div className="button-kw-container">
+          {currentKeyword.isFetching ?
+            <Loading size="27px" margin="4px"/>
+            : <button className="button-kw" onClick={this.getKeyWord}>Get Key Word</button>}
+        </div>
+        {wordList.length > 0 &&
+          <div>
+            <p>You've found {wordList.length} {wordList.length === 1? 'word' : 'words'}! Look for a total of 12!</p>
+            <KeywordOrganizer keywords={wordList} moveKeyword={moveKeyword} />
+            {wordList.length === 12 &&
+              <div className="button-kw-container copy-button-container">
+                <CopyKeywords keywords={wordList}>Copy Mnemonic</CopyKeywords>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    )
   }
 
   render() {
+
+    if (!this.state.web3) {
+      return (<Loading size="50px" margin="4px"></Loading>)
+    }
+
     return (
       <div className="App">
         <nav className="navbar pure-menu pure-menu-horizontal">
-            <a href="#" className="pure-menu-heading pure-menu-link">Status Community</a>
         </nav>
-
         <main className="container">
           <div className="pure-g">
             <div className="pure-u-1-1">
@@ -77,11 +94,7 @@ class App extends Component {
               <p>The below will show a stored key word that is part of a 12 word phrase that can be used to reconstruct a private key in order to earn a reward.</p>
               <p>This is a simple proof of concept, obviously, we will need to implement the ability to scan a QR code from a DApp that will generate the right call
                 and only then diplay the result to the seeker.</p>
-              <div className="button-kw-container">
-                <button className="button-kw" onClick={this.getKeyWord}>Get Key Word</button>
-              </div>
-              <p>Your lucky one of twelve key words is (drumroll):</p>
-              <p className="center-text"><strong>{this.state.keyWord}</strong></p>
+              {this._renderGame()}
             </div>
           </div>
         </main>
@@ -90,4 +103,11 @@ class App extends Component {
   }
 }
 
-export default App
+const mapStateToProps = state => {
+  return {
+    currentKeyword: state.currentKeyword,
+    wordList: state.wordList,
+  }
+}
+
+export default connect(mapStateToProps)(App)

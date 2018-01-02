@@ -1,0 +1,18 @@
+
+.keyword-organizer {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.keyword {
+  width: calc(100% * (1/4) - 10px - 1px);
+  padding: 10px;
+  margin: 10px 0 0 2%;
+  text-align: center;
+  display: inline-block;
+  flex-grow: 1;
+
+  background-color: #233e5e;
+  color: #fff;
+  border-radius: 5px;
+}
