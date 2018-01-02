@@ -10,7 +10,13 @@ As always, this is about The State of Us.
 
 ## Instructions
 
+Easiest setup ever!
+
 First of all, make sure you have Status installed. The latest android builds can be found [here](http://artifacts.status.im:8081/artifactory/nightlies-local/). If you require an iOS TestFlight invite, please join our [chat](https://chat.status.im/) and ping me @cryptowanderer and I will add you to our list of testers.
+
+Once installed, open the chat with `Console` and select the `@browse` suggestion just above the keyboard input. Naviagte to `https://andytudhope.github.io/StatusSeekers/` and play to your heart's content.
+
+### Getting Set Up Locally
 
 Once installed, open the chat with `Console` and select the `/debug` suggestion just above the keyboard input. Turn debugging on.
 
@@ -59,4 +65,5 @@ Well, we can be cleverer than that. The 12 words are not necessarily stored in o
 
 Then, I plan on writing a simple bot that accepts 12 word long strings and either returns `No`, or the `password` required to unlock the Status account with the reward in it (for obvious reasons this code might have to stay private until after the #ArtProject has begun). Keep it simple; keep it fun!
 
+Next up, we will also need to implement a basic DB so as to maintain app state for users as they run around the art work trying to find all the QR codes. In addition to that, I want to make sure that each time someone finds and scans a QR (which results to a `call()` to a smart contract on Ethereum) that some funky and cool lights show/sound/movement happens. To be worked on, hopefully quite closely with @Shrugs.
 
