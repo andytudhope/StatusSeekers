@@ -85,6 +85,8 @@ class App extends Component {
 
     return (
       <div className="App">
+        <nav className="navbar pure-menu pure-menu-horizontal">
+        </nav>
         <main className="container">
           <div className="pure-g">
             <div className="pure-u-1-1">
