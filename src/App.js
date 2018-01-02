@@ -59,7 +59,7 @@ class App extends Component {
       <div>
         <div className="button-kw-container">
           {currentKeyword.isFetching ?
-            <Loading/>
+            <Loading size="27px" margin="4px"/>
             : <button className="button-kw" onClick={this.getKeyWord}>Get Key Word</button>}
         </div>
         {wordList.length > 0 &&
@@ -80,20 +80,11 @@ class App extends Component {
   render() {
 
     if (!this.state.web3) {
-      return (<Loading></Loading>)
+      return (<Loading size="50px" margin="4px"></Loading>)
     }
-
-    const {
-      currentKeyword,
-      wordList,
-    } = this.props
 
     return (
       <div className="App">
-        <nav className="navbar pure-menu pure-menu-horizontal">
-            <a href="#" className="pure-menu-heading pure-menu-link">Status Community</a>
-        </nav>
-
         <main className="container">
           <div className="pure-g">
             <div className="pure-u-1-1">

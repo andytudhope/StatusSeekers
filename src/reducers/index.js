@@ -16,7 +16,7 @@ const reducer = (state = initialState, action) => {
         }
       }
     case actions.ADD_KEYWORD:
-      let isNew = state.wordList.indexOf(action.keyword) == -1
+      let isNew = state.wordList.indexOf(action.keyword) === -1
       let newWordList = isNew ?
        [...state.wordList, action.keyword]
        : state.wordList
