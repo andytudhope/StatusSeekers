@@ -8,6 +8,7 @@ import App from './App'
 import reducer from './reducers'
 import registerServiceWorker from './registerServiceWorker'
 import { loadState, saveState } from './localStorage'
+import throttle from 'lodash/throttle'
 
 import './index.css'
 
@@ -27,9 +28,9 @@ const store = createStore(
 
 // Save the state to localStorage any time it changes, using throttle to make
 // sure this doesn't happen too often, given the use of JSON.stringify()
-store.subscribe(() => {
+store.subscribe(throttle(() => {
   saveState(store.getState());
-})
+}), 1000)
 
 ReactDOM.render(
   <Provider store={store}>
