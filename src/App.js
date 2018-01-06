@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import Splash from 'react-splash'
 
 import getWeb3 from './utils/getWeb3'
 import statusSeekerContract from './utils/statusSeeker'
@@ -87,6 +88,13 @@ class App extends Component {
       <div className="App">
         <nav className="navbar pure-menu pure-menu-horizontal">
         </nav>
+
+        <Splash 
+          text="Status Seekers" 
+          src="http://andytudhope.africa/wp-content/uploads/2017/08/cropped-header.jpg" 
+          style={{ height: '50vh' }}
+        />
+
         <main className="container">
           <div className="pure-g">
             <div className="pure-u-1-1">

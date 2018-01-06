@@ -62,6 +62,7 @@
     "react-dnd-touch-backend": "^0.3.19",
     "react-dom": "^15.4.2",
     "react-redux": "^5.0.6",
+    "react-splash": "^0.1.0",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
     "status-dev-cli": "^3.2.9"
