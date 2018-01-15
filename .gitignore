@@ -1,6 +1,5 @@
 build/
 build_webpack/
 node_modules/
-test/
 package-lock.json
 truffle-config.js
