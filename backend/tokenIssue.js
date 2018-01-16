@@ -11,8 +11,14 @@ const computeSignature = (tokenId, recipientAddress, issuingAddress, web3) => {
   const s = '0x' + signature.slice(66, 130);
   const v =  web3.toDecimal('0x' + signature.slice(130, 132)) + 27
 
+  // this prefix is required by the `ecrecover` builtin solidity function (other than that it is pretty arbitrary)
+  const prefix = "\x19Ethereum Signed Message:\n32";
+  const prefixedBytes = web3.fromAscii(prefix) + hash.slice(2)
+  const prefixedHash = web3.sha3(prefixedBytes, { encoding: 'hex' })
+
   return {
     hash,
+    prefixedHash,
     signature,
     r,
     s,

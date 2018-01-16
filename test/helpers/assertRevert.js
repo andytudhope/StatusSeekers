@@ -3,7 +3,7 @@ module.exports = async promise => {
     await promise
     assert.fail('Expected revert not received')
   } catch (error) {
-    const revertFound = error.message.search('revert') >= 0
-    assert(revertFound, `Expected "revert", got ${error} instead`)
+    const revertOrAssertFound = error.message.search('revert') >= 0 || error.message.search('assert') >= 0
+    assert(revertOrAssertFound, `Expected "revert", got ${error} instead`)
   }
 }
