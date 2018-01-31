@@ -5,7 +5,7 @@ contract StatusSeeker {
     bytes32[12] public keyWords;
     bytes32[12] public hashedKeyWords;
 
-    function StatusSeeker(bytes32[12] _keyWords) public {
+    function setKeyWords(bytes32[12] _keyWords) public {
         keyWords = _keyWords;
     }
 
