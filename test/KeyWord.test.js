@@ -1,6 +1,6 @@
 const StatusSeekers = artifacts.require('StatusSeeker')
 const toBytes32 = require('../backend/utils/toBytes32')
-const exception = require('./helpers/exceptions')
+const assertRevert = require('./helpers/assertRevert')
 var sha3 = require('solidity-sha3').default
 const BigNumber = web3.BigNumber
 
@@ -31,7 +31,7 @@ contract('StatusSeekers', accounts => {
           hash = sha3(wordNum, nonce)
           solHashResult = await statusSeekersInstance.hasher(wordBytes, nonce, {from: seeker})
         })
-    
+
         it('should hash the user address and tokenId the same in javascript as in solidity', async () => {
             hash.should.be.equal(solHashResult)
         })
@@ -68,20 +68,12 @@ contract('StatusSeekers', accounts => {
                 this.splice(to, 0, this.splice(from, 1)[0]);
             };
             keyWords.move(3,0)
-            try {
-                await statusSeekersInstance.verify(keyWords, nonces, {from: seeker})
-            } catch (error) {
-                return exception.ensureException(error)
-            }
+            await assertRevert(statusSeekersInstance.verify(keyWords, nonces, {from: seeker}))
         })
 
         it('should throw an exception if one of the hashes is incorrect', async () => {
             keyWords.splice(0, 1, toBytes32(parseInt(web3.toHex(Math.random().toString(36).substr(8))), 16))
-            try {
-                await statusSeekersInstance.verify(keyWords, nonces, {from: seeker})
-            } catch (error) {
-                return exception.ensureException(error)
-            }
+            await assertRevert(statusSeekersInstance.verify(keyWords, nonces, {from: seeker}))
         })
 
         it('should throw an exception if nonces are in incorrect order', async () => {
@@ -89,20 +81,12 @@ contract('StatusSeekers', accounts => {
                 this.splice(to, 0, this.splice(from, 1)[0]);
             }
             nonces.move(0,3)
-            try {
-                await statusSeekersInstance.verify(keyWords, nonces, {from: seeker})
-            } catch (error) {
-                return exception.ensureException(error)
-            }
+            await assertRevert(statusSeekersInstance.verify(keyWords, nonces, {from: seeker}))
         })
 
         it('should throw an exception if one of the nonces is incorrect', async () => {
             nonces.splice(0, 1, Math.floor(Math.random()*100))
-            try {
-                await statusSeekersInstance.verify(keyWords, nonces, {from: seeker})
-            } catch (error) {
-                return exception.ensureException(error)
-            }
+            await assertRevert(statusSeekersInstance.verify(keyWords, nonces, {from: seeker}))
         })
     })
 })
