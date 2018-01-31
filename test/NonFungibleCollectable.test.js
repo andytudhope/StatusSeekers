@@ -85,10 +85,8 @@ contract('NonFungibleToken', accounts => {
       it('reverts', async () => {
         const {prefixedHash, v, r, s} = signatureObject
         await assertRevert(token.claimCollectableWithCoupon(_secondTokenId, prefixedHash, v, r, s, {from: recipientAddress}))
-        // neither the token from the signature nor the token in claim move
-        const newOwnerT1 = await token.ownerOf(_firstTokenId)
-        const newOwnerT2 = await token.ownerOf(_secondTokenId)
-        newOwnerT1.should.be.equal(newOwnerT2).be.equal(issuingWallet)
+        const newOwner = await token.ownerOf(_secondTokenId)
+        newOwner.should.be.equal(issuingWallet)
         const balance2 = await token.balanceOf(attackerAddress)
         balance2.should.be.bignumber.equal(0)
       })

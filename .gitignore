@@ -3,3 +3,4 @@ build_webpack/
 node_modules/
 package-lock.json
 truffle-config.js
+connectRemix.sh

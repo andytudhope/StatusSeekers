@@ -66,6 +66,7 @@
     "react-redux": "^5.0.6",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
+    "solidity-sha3": "^0.4.1",
     "status-dev-cli": "^3.2.9"
   },
   "scripts": {
@@ -76,7 +77,8 @@
   },
   "jest": {
     "collectCoverageFrom": [
-      "src/**/*.{js,jsx}"
+      "src/**/*.{js,jsx}",
+      "test/*.{js,jsx}"
     ],
     "setupFiles": [
       "<rootDir>\\config\\polyfills.js"

@@ -1,5 +1,3 @@
-const Web3 = require('web3')
-
 const computeSignature = (tokenId, recipientAddress, issuingAddress, web3) => {
   const idString = (tokenId).toString(16)
   const hashInput = '0'.repeat(64 - idString.length) + idString + web3.toHex(recipientAddress).slice(2)
