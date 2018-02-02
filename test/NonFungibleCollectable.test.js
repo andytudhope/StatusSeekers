@@ -1,9 +1,7 @@
 const assertRevert = require('./helpers/assertRevert')
 const BigNumber = web3.BigNumber
-const {
-  computeMintedSignature,
-  computeLevelSignature,
-} = require('../backend/tokenIssue.js')
+const { generateRandomInLevel, getEdgeCaseLevels } = require('./helpers/generateRandomInLevel')
+const { computeMintedSignature, computeLevelSignature } = require('../backend/tokenIssue.js')
 const NonFungibleToken = artifacts.require('NonFungibleCollectable.sol')
 
 require('chai')
@@ -200,5 +198,34 @@ contract('NonFungibleToken', accounts => {
         balance2.should.be.bignumber.equal(0)
       })
     })
+  })
+
+  describe('getTokenLevel()', () => {
+
+
+    const testLevelEdgeCases = level =>
+      it('should correctly determine the level for edge cases between ' + level + ' and ' + (level + 1) + ' level tokens.', async () => {
+        const {above, below} = getEdgeCaseLevels(level)
+        const returnedBelow = await token.getTokenLevel.call(below)
+        returnedBelow.should.be.bignumber.equal(level)
+        const returnedAbove = await token.getTokenLevel.call(above)
+        returnedAbove.should.be.bignumber.equal(level + 1)
+      })
+
+    const testLevel = (level, iterations) =>
+      it('should correctly get the level of a level of ' + iterations + ' random ' + level + ' tokens', async () => {
+        for (let i = 1; i <= iterations; i++) {
+          process.stdout.write('testing iteration' + i + ' level ' + level + '\r')
+          const tokenId = generateRandomInLevel(level)
+          BigNumber.config({ROUNDING_MODE: BigNumber.ROUND_FLOOR})
+          const tokenIdString = tokenId.toString()
+          const returnedLevel = await token.getTokenLevel.call(tokenIdString)
+          returnedLevel.should.be.bignumber.equal(level)
+        }
+      })
+    const range12 = [...Array(12).keys()] // this is just a list from 0-11
+    const range13 = [...range12, 12] // this is just a list from 0-12
+    range12.map(i => testLevelEdgeCases(i))
+    range13.map(i => testLevel(i, 100))
   })
 })
