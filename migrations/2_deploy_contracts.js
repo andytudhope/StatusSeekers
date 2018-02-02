@@ -9,7 +9,13 @@ for (var i = 0; i < 12; i++) {
 console.log(keyWords)
 
 module.exports = function(deployer) {
-  StatusSeeker.new(keyWords).then(s => {
-    console.log(s.address)
-  })
+  deployer.deploy(StatusSeeker)
+    .then(() => {
+      return StatusSeeker.deployed()
+        .then(kw => {
+          kw.setKeyWords(keyWords).then((res) => {
+            console.log('Set keyWords!', res.tx)
+          })
+        })
+    })
 }

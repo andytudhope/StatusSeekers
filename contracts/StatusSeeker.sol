@@ -1,11 +1,13 @@
 pragma solidity ^0.4.18;
 
-contract StatusSeeker {
+import "./lib/Ownable.sol";
+
+contract StatusSeeker is Ownable {
     
     bytes32[12] public keyWords;
     bytes32[12] public hashedKeyWords;
 
-    function StatusSeeker(bytes32[12] _keyWords) public {
+    function setKeyWords(bytes32[12] _keyWords) onlyOwner public {
         keyWords = _keyWords;
     }
 
@@ -13,7 +15,7 @@ contract StatusSeeker {
         return keccak256(_keyWord, _nonce);
     } 
 
-    function addRewardKeyWords(bytes32[12] _hashedKeyWords) public {
+    function addRewardKeyWords(bytes32[12] _hashedKeyWords) onlyOwner public {
         hashedKeyWords = _hashedKeyWords;
     }
 
