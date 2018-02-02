@@ -1,3 +1,5 @@
+import Web3 from 'web3'
+
 export const actions = {
   LOADING_KEYWORD: 'LOADING_KEYWORD',
   ADD_KEYWORD: 'ADD_KEYWORD',
@@ -13,14 +15,18 @@ export const addKeyword = (statusSeekerInstance) => {
     // this id will be generated when the users scans the QR and the corresponding word
     // will be returned without giving away it's position in the array.
     const id = Math.floor((Math.random() * 12));
+    const web3 = new Web3()
 
-    statusSeekerInstance.getWord(id).then(keyword =>
+    statusSeekerInstance.getWord(id).then(function(keywordHex) {
+      // Convert from bytes32 to string
+      let keyword = web3.toAscii(keywordHex)
+      
       // Update state with the result.
       dispatch ({
         type: actions.ADD_KEYWORD,
         keyword
       })
-    )
+    })
   }
 }
 

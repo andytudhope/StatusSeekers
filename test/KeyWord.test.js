@@ -1,5 +1,5 @@
 const StatusSeekers = artifacts.require('StatusSeeker')
-const toBytes32 = require('../backend/utils/toBytes32')
+const toBytes32 = require('../SeekerBackend/utils/toBytes32')
 const assertRevert = require('./helpers/assertRevert')
 var sha3 = require('solidity-sha3').default
 const BigNumber = web3.BigNumber
