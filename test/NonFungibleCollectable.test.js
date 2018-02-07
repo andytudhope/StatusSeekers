@@ -202,7 +202,6 @@ contract('NonFungibleToken', accounts => {
 
   describe('getTokenLevel()', () => {
 
-
     const testLevelEdgeCases = level =>
       it('should correctly determine the level for edge cases between ' + level + ' and ' + (level + 1) + ' level tokens.', async () => {
         const {above, below} = getEdgeCaseLevels(level)
@@ -213,16 +212,17 @@ contract('NonFungibleToken', accounts => {
       })
 
     const testLevel = (level, iterations) =>
-      it('should correctly get the level of a level of ' + iterations + ' random ' + level + ' tokens', async () => {
-        for (let i = 1; i <= iterations; i++) {
+      it('should correctly get the level of a level of ' + iterations + ' random ' + level + ' tokens', () => {
+        [...Array(iterations).keys()].map(async i => {
           process.stdout.write('testing iteration' + i + ' level ' + level + '\r')
           const tokenId = generateRandomInLevel(level)
           BigNumber.config({ROUNDING_MODE: BigNumber.ROUND_FLOOR})
           const tokenIdString = tokenId.toString()
           const returnedLevel = await token.getTokenLevel.call(tokenIdString)
           returnedLevel.should.be.bignumber.equal(level)
-        }
+        })
       })
+
     const range12 = [...Array(12).keys()] // this is just a list from 0-11
     const range13 = [...range12, 12] // this is just a list from 0-12
     range12.map(i => testLevelEdgeCases(i))
