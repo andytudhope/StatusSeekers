@@ -1,5 +1,4 @@
-var StatusSeeker = artifacts.require("./StatusSeeker")
-const toBytes32 = require('../SeekerBackend/utils/toBytes32')
+var StatusSeeker = artifacts.requirw('backend/utils/toBytes32')
 
 let keyWords = ['cat', 'rabbit', 'hole', 'art', 'project', 'space', 'time', 'love', 'peace', 'kind', 'human', 'being']
 for (var i = 0; i < 12; i++) {

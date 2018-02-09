@@ -14,7 +14,13 @@ Easiest setup ever!
 
 First of all, make sure you have Status installed. The latest android builds can be found [here](http://artifacts.status.im:8081/artifactory/nightlies-local/). If you require an iOS TestFlight invite, please join our [chat](https://chat.status.im/) and ping me @cryptowanderer and I will add you to our list of testers.
 
-Once installed, open the chat with `Console` and select the `@browse` suggestion just above the keyboard input. Naviagte to `https://andytudhope.github.io/StatusSeekers/` and play to your heart's content.
+Once installed, open the chat with `Console` and select the `@browse` suggestion just above the keyboard input. Naviagte to `https://andytudhope.github.io/StatusSeekers/` and play to your heart's content. 
+
+We have not yet implemented the NFT collectible part yet, and are looking for help with rendering images in the frontend, on resource-restricted devices using js. There are essentially 2 approaches we can take, depending one ase and performance. 
+
+1. Use [processingjs](http://processingjs.org/) to render the images on the frontend. Each new level corresponds to a new dimension or attribute to the virtual creature being created as you wonder through the physical structure. 
+
+2. Use the seed drawn by the user that is used to construct the first 40 bits of the tokenID, and then put that through a program like DeepDream 12 times with certain features turned on/off depending on the info returned from the new tokenLevel. 
 
 ### Getting Set Up Locally
 
@@ -59,11 +65,20 @@ Happy hunting!
 
 ## Sketch of The Seeker Game
 
-You may look at the 'smart' contract and think, "No way! That's too simple-minded to ever work. All someone would need to do is figure out the address you had deployed the contract at and inspect it for themselves to figure out the words and swipe the reward before the game ever began."
+Step 1: Show up at the event and download Status.
+Step 2: Draw a seed and take a photo of it using the Status Seekers DApp.
+(Step 2a: This gets submitted to our NonFungibleCollectible contract and is used to set the first 40bits of your unique token)
+Step 3: Explore and interact with the #ArtProject structure (a klein bottle!)
+Step 4: Find QR codes hidden around it.
+Step 5: Scan the codes you find
+(Step 5a: First thing that happens is that you get a keyWord back directly from the StatusSeekers contract. Collect all 12 and you can use them to reconstruct a private key and get access to our reward account. Hints to the order are also in the structure.
+Step 5b: Scanning the QR will also send a message to our server, where we handle off-chain signing and verification, as well a the gas costs involved there. Using this setup, we can return to the user the next "level" of their collectible and use the information contained in tht level to render another attribute/dimension.)
+Step 6: Gaze in wonder at your 12-dimensional crypto-creature-creation after having a mind-blowing experience exploring the interwoven klein bottle bridge mapping Dogethereum transactions. Yes that is a valid sentence. What a time to be alive...
 
-Well, we can be cleverer than that. The 12 words are not necessarily stored in order in the smart contract (and we will only verify the source once the #ArtProject has begun), so we actually have `12!` 'hiding places' to put the reward. The only hints given to the actual order will be incorporated in the physical piece. 
 
-Then, I plan on writing a simple bot that accepts 12 word long strings and either returns `No`, or the `password` required to unlock the Status account with the reward in it (for obvious reasons this code might have to stay private until after the #ArtProject has begun). Keep it simple; keep it fun!
+You'll notice that the StatusSeekers contract is fully reusable. Essentially the idea there is that the owner can add any 12 keyWords they like. We can then add the rewardKeyWords, which are hashed (with a 256-bit nonce), in the correct order and - when someone thinks they have the right order, they can submit it for verification to the contract. The #ArtProject is about a really cool bridge, sure, but the vision is definitely longer term and revolves around setting up a whole decentralized artistic community and we want to play this game all over the world, in all kinds of structures!
 
-Next up, we will also need to implement a basic DB so as to maintain app state for users as they run around the art work trying to find all the QR codes. In addition to that, I want to make sure that each time someone finds and scans a QR (which results to a `call()` to a smart contract on Ethereum) that some funky and cool lights show/sound/movement happens. To be worked on, hopefully quite closely with @Shrugs.
+Please take a look through our unit tests for the NonFungibleCollectible contract and let us know what you think. We are also very keen to hear ideas about the best way to actually render images on the frontend in a slick and nevertheless artistic way.
+
+
 
