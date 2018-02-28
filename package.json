@@ -71,7 +71,9 @@
     "web3": "^0.19.0"
   },
   "scripts": {
-    "start": "node scripts/start.js",
+    "start-server": "cd SeekerBackend && npm start &",
+    "start-frontend":  "node scripts/start.js",
+    "start": "npm run start-server && npm run start-frontend",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
     "deploy": "npm run build&&gh-pages -d build_webpack"
@@ -108,5 +110,6 @@
   },
   "eslintConfig": {
     "extends": "react-app"
-  }
+  },
+  "proxy": "http://localhost:8080"
 }
