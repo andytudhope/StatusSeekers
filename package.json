@@ -67,7 +67,8 @@
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
     "solidity-sha3": "^0.4.1",
-    "status-dev-cli": "^3.2.9"
+    "status-dev-cli": "^3.2.9",
+    "web3": "^0.19.0"
   },
   "scripts": {
     "start": "node scripts/start.js",
