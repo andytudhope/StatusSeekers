@@ -7,6 +7,8 @@ contract StatusSeeker is Ownable {
     bytes32[12] public keyWords;
     bytes32[12] public hashedKeyWords;
 
+    event ContractFunded(address _from, uint _amount);
+
     function setKeyWords(bytes32[12] _keyWords) onlyOwner public {
         keyWords = _keyWords;
     }
@@ -19,11 +21,19 @@ contract StatusSeeker is Ownable {
         hashedKeyWords = _hashedKeyWords;
     }
 
-    function verify(bytes32[12] _attemptKeyWords, uint256[12] _nonce) public view returns (bool) {
+    function verify(bytes32[12] _attemptKeyWords, uint256[12] _nonce) public returns (bool) {
         for (uint8 i = 0; i < 12; i++) {
             require(hashedKeyWords[i] == hasher(_attemptKeyWords[i], _nonce[i]));
         }
-        return true;
+        _transferWinnings(msg.sender);
+    }
+
+    function _transferWinnings(address _to) internal {
+        _to.transfer();
+    }
+
+    function() payable {
+        ContractFunded(msg.sender, msg.value);
     }
     
 }
