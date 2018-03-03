@@ -29,7 +29,8 @@ contract StatusSeeker is Ownable {
     }
 
     function _transferWinnings(address _to) internal {
-        _to.transfer();
+        uint256 amount = this.balance;
+        _to.transfer(amount);
     }
 
     function() payable {
