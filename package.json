@@ -67,10 +67,13 @@
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
     "solidity-sha3": "^0.4.1",
-    "status-dev-cli": "^3.2.9"
+    "status-dev-cli": "^3.2.9",
+    "web3": "^0.19.0"
   },
   "scripts": {
-    "start": "node scripts/start.js",
+    "start-server": "cd SeekerBackend && npm start &",
+    "start-frontend":  "node scripts/start.js",
+    "start": "npm run start-server && npm run start-frontend",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
     "deploy": "npm run build&&gh-pages -d build_webpack"
@@ -107,5 +110,6 @@
   },
   "eslintConfig": {
     "extends": "react-app"
-  }
+  },
+  "proxy": "http://localhost:8080"
 }

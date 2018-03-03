@@ -1,8 +1,9 @@
 const assertRevert = require('./helpers/assertRevert')
 const BigNumber = web3.BigNumber
 const { generateRandomInLevel, getEdgeCaseLevels } = require('./helpers/generateRandomInLevel')
-const { computeMintedSignature, computeLevelSignature } = require('../backend/tokenIssue.js')
+const { computeMintedSignature, computeLevelSignature } = require('../SeekerBackend/utils/tokenIssue.js')
 const NonFungibleToken = artifacts.require('NonFungibleCollectable.sol')
+const Promise = require('bluebird');
 
 require('chai')
   .use(require('chai-as-promised'))
@@ -23,6 +24,10 @@ contract('NonFungibleToken', accounts => {
   const recipientAddress = accounts[2] // only issuing wallet can issue tokens via off chain signature
   const attackerAddress = accounts[3]
   const otherUser = accounts[4]
+
+  if (typeof web3.eth.getAccountsPromise === 'undefined') {
+    Promise.promisifyAll(web3.eth, { suffix: 'Promise' });
+  }
 
   beforeEach(async () => {
     token = await NonFungibleToken.new(_name, _symbol, issuingWallet, { from: nonFungibleCollectableOwner })
@@ -49,7 +54,7 @@ contract('NonFungibleToken', accounts => {
     let signatureObject
     let solHashResult
     beforeEach(async () => {
-      signatureObject = computeMintedSignature(firstTokenId, recipientAddress, issuingWallet, web3)
+      signatureObject = await computeMintedSignature(firstTokenId, recipientAddress, issuingWallet, web3)
       solHashResult = await token.hasher(firstTokenId, {from: recipientAddress})
     })
 
@@ -96,7 +101,7 @@ contract('NonFungibleToken', accounts => {
 
     describe('when a user uses a signature issued by an attacker (other than the `collectableCouponIssuer`)', () => {
       it('reverts', async () => {
-        const {prefixedHash, v, r, s} = computeMintedSignature(firstTokenId, recipientAddress, attackerAddress, web3)
+        const {prefixedHash, v, r, s} = await computeMintedSignature(firstTokenId, recipientAddress, attackerAddress, web3)
         await assertRevert(token.claimMintedCollectableWithCoupon(firstTokenId, prefixedHash, v, r, s, {from: recipientAddress}))
         const newOwner = await token.ownerOf(firstTokenId)
         newOwner.should.be.equal(issuingWallet)
@@ -123,7 +128,7 @@ contract('NonFungibleToken', accounts => {
     let signatureObject
     let solHashResult
     beforeEach(async () => {
-      signatureObject = computeLevelSignature(level0Token, 0, recipientAddress, issuingWallet, web3)
+      signatureObject = await computeLevelSignature(level0Token, 0, recipientAddress, issuingWallet, web3)
       solHashResult = await token.hasherWithLevel(level0Token, 0, {from: recipientAddress})
     })
 
@@ -143,14 +148,14 @@ contract('NonFungibleToken', accounts => {
     describe('the user has claimed a token', () => {
       beforeEach(async () => {
         // create a level 5 token for recipientAddress:
-        const {prefixedHash, v, r, s} = computeLevelSignature(level5Token, 5, recipientAddress, issuingWallet, web3)
+        const {prefixedHash, v, r, s} = await computeLevelSignature(level5Token, 5, recipientAddress, issuingWallet, web3)
         const issueTx = await token.claimLevelCollectableWithCoupon(level5Token, 5, prefixedHash, v, r, s, {from: recipientAddress})
         const newOwner = await token.ownerOf(level5Token)
         newOwner.should.be.equal(recipientAddress)
       })
 
       it('should allow the user to replace a level token if it is a higher level than the current token', async () => {
-        const {prefixedHash, v, r, s} = computeLevelSignature(level7Token, 7, recipientAddress, issuingWallet, web3)
+        const {prefixedHash, v, r, s} = await computeLevelSignature(level7Token, 7, recipientAddress, issuingWallet, web3)
         solHashResult = await token.hasherWithLevel(level7Token, 7, {from: recipientAddress})
         const issueTx = await token.claimLevelCollectableWithCoupon(level7Token, 7, prefixedHash, v, r, s, {from: recipientAddress})
         const newOwner = await token.ownerOf(level7Token)
@@ -190,7 +195,7 @@ contract('NonFungibleToken', accounts => {
 
     describe('when a user uses a signature issued by an attacker (other than the `collectableCouponIssuer`)', () => {
       it('reverts', async () => {
-        const {prefixedHash, v, r, s} = computeLevelSignature(level0Token, 0, recipientAddress, attackerAddress, web3)
+        const {prefixedHash, v, r, s} = await computeLevelSignature(level0Token, 0, recipientAddress, attackerAddress, web3)
         await assertRevert(token.claimLevelCollectableWithCoupon(level0Token, 0, prefixedHash, v, r, s, {from: recipientAddress}))
         const newOwner = await token.ownerOf(firstTokenId)
         newOwner.should.be.equal(issuingWallet)
@@ -201,7 +206,6 @@ contract('NonFungibleToken', accounts => {
   })
 
   describe('getTokenLevel()', () => {
-
     const testLevelEdgeCases = level =>
       it('should correctly determine the level for edge cases between ' + level + ' and ' + (level + 1) + ' level tokens.', async () => {
         const {above, below} = getEdgeCaseLevels(level)

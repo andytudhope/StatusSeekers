@@ -78,13 +78,11 @@ contract NonFungibleCollectable is NonFungibleToken, Ownable {
     clearApprovalAndTransfer(collectableCouponIssuer, msg.sender, tokenId);
   }
 
-  event Test(bytes32 compHash, bytes32 hash);
   function claimLevelCollectableWithCoupon(uint256 tokenId, uint8 tokenLevel, bytes32 hash, uint8 v, bytes32 r, bytes32 s)
     public returns(bool success)
   {
     bytes32 computedHash = hasherWithLevel(tokenId, tokenLevel);
     require(tokenOwner[tokenId] == address(0));
-    Test(computedHash, hash);
     require(computedHash == hash);
     require(getAddress(hash, v, r, s) == collectableCouponIssuer);
 
